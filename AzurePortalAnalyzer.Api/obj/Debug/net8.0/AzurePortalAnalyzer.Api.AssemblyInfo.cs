@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AzurePortalAnalyzer.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ae1c9de510d7d1dd4852138c473144dec5fad3d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5229deebf955b87aeb31a0346027d60f92c9bb5")]
 [assembly: System.Reflection.AssemblyProductAttribute("AzurePortalAnalyzer.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AzurePortalAnalyzer.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

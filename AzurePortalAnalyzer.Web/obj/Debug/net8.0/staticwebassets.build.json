@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MIKbP3jxBc8O1S9YSlqOKnG1b/k39naYoOXhOrZGXf8=",
+  "Hash": "G5K7PsCcS7CTKGimTbtajCk9ST/NA1XI64oxyFiet30=",
   "Source": "AzurePortalAnalyzer.Web",
   "BasePath": "_content/AzurePortalAnalyzer.Web",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "AzurePortalAnalyzer.Api",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishProperties": "",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildProperties": "",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
     }
   ],
