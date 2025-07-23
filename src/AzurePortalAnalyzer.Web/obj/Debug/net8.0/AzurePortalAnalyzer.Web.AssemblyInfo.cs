@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("AzurePortalAnalyzer.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9ef35ac7b0a5f5f699c8ee964bff96bc376e669")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0b524cdf622540199b35e8c56e5da684eb6b6379")]
 [assembly: System.Reflection.AssemblyProductAttribute("AzurePortalAnalyzer.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AzurePortalAnalyzer.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

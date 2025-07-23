@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePortalAnalyzer.Core", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePortalAnalyzer.Infrastructure", "src\AzurePortalAnalyzer.Infrastructure\AzurePortalAnalyzer.Infrastructure.csproj", "{70C6296D-554E-4678-86E9-45DBC9E70A95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePortalAnalyzer.Client", "src\AzurePortalAnalyzer.Client\AzurePortalAnalyzer.Client.csproj", "{9A335299-4D30-4F93-B73A-CE3AC393B9C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3D278F12-EE53-4082-A743-C283E8F9F755}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzurePortalAnalyzer.Tests", "tests\AzurePortalAnalyzer.Tests\AzurePortalAnalyzer.Tests.csproj", "{A6DBFED0-0AB7-4AE8-8AA1-6F9EAF536CE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,10 +38,20 @@ Global
 		{70C6296D-554E-4678-86E9-45DBC9E70A95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70C6296D-554E-4678-86E9-45DBC9E70A95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70C6296D-554E-4678-86E9-45DBC9E70A95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A335299-4D30-4F93-B73A-CE3AC393B9C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A335299-4D30-4F93-B73A-CE3AC393B9C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A335299-4D30-4F93-B73A-CE3AC393B9C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A335299-4D30-4F93-B73A-CE3AC393B9C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6DBFED0-0AB7-4AE8-8AA1-6F9EAF536CE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6DBFED0-0AB7-4AE8-8AA1-6F9EAF536CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6DBFED0-0AB7-4AE8-8AA1-6F9EAF536CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6DBFED0-0AB7-4AE8-8AA1-6F9EAF536CE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CAC82968-97A6-4D9D-9524-286CE5822AA6} = {E176614F-E631-4682-88B2-DC9E9CDA00D2}
 		{51544264-C25A-4F4B-BA00-BB8BD889800D} = {E176614F-E631-4682-88B2-DC9E9CDA00D2}
 		{70C6296D-554E-4678-86E9-45DBC9E70A95} = {E176614F-E631-4682-88B2-DC9E9CDA00D2}
+		{9A335299-4D30-4F93-B73A-CE3AC393B9C5} = {E176614F-E631-4682-88B2-DC9E9CDA00D2}
+		{A6DBFED0-0AB7-4AE8-8AA1-6F9EAF536CE9} = {3D278F12-EE53-4082-A743-C283E8F9F755}
 	EndGlobalSection
 EndGlobal
