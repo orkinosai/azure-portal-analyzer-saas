@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/AzurePortalAnalyzer.API.props" />
+</Project>

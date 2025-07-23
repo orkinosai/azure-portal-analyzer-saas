@@ -1,0 +1,240 @@
+@page "/analysis/status/{requestId:guid}"
+@using AzurePortalAnalyzer.Web.Models
+@using AzurePortalAnalyzer.Web.Services
+@inject AnalysisApiService AnalysisApi
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+<PageTitle>Analysis Status</PageTitle>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3><i class="bi bi-graph-up"></i> Analysis Status</h3>
+                    <button class="btn btn-outline-secondary" @onclick="RefreshStatus">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+                <div class="card-body">
+                    @if (analysisRequest == null)
+                    {
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading analysis request...</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Request Details</h5>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Request ID:</strong></td>
+                                        <td><code>@analysisRequest.Id</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td>@analysisRequest.UserEmail</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Subscription ID:</strong></td>
+                                        <td><code>@analysisRequest.SubscriptionId</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Resource Group:</strong></td>
+                                        <td>@(analysisRequest.ResourceGroup ?? "All")</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Requested At:</strong></td>
+                                        <td>@analysisRequest.RequestedAt.ToString("yyyy-MM-dd HH:mm:ss") UTC</td>
+                                    </tr>
+                                    @if (analysisRequest.CompletedAt.HasValue)
+                                    {
+                                        <tr>
+                                            <td><strong>Completed At:</strong></td>
+                                            <td>@analysisRequest.CompletedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") UTC</td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Status</h5>
+                                <div class="status-indicator mb-3">
+                                    @switch (analysisRequest.Status.ToLower())
+                                    {
+                                        case "pending":
+                                            <span class="badge bg-secondary fs-6">
+                                                <i class="bi bi-clock"></i> Pending
+                                            </span>
+                                            break;
+                                        case "inprogress":
+                                            <span class="badge bg-info fs-6">
+                                                <i class="bi bi-gear"></i> In Progress
+                                            </span>
+                                            break;
+                                        case "completed":
+                                            <span class="badge bg-success fs-6">
+                                                <i class="bi bi-check-circle"></i> Completed
+                                            </span>
+                                            break;
+                                        case "emailsent":
+                                            <span class="badge bg-success fs-6">
+                                                <i class="bi bi-envelope-check"></i> Email Sent
+                                            </span>
+                                            break;
+                                        case "failed":
+                                            <span class="badge bg-danger fs-6">
+                                                <i class="bi bi-x-circle"></i> Failed
+                                            </span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary fs-6">@analysisRequest.Status</span>
+                                            break;
+                                    }
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(analysisRequest.ErrorMessage))
+                                {
+                                    <div class="alert alert-danger">
+                                        <i class="bi bi-exclamation-triangle"></i>
+                                        <strong>Error:</strong> @analysisRequest.ErrorMessage
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(analysisRequest.DocumentUrl))
+                                {
+                                    <div class="d-grid gap-2">
+                                        <a href="@analysisRequest.DocumentUrl" target="_blank" class="btn btn-primary">
+                                            <i class="bi bi-download"></i> Download Analysis Document
+                                        </a>
+                                    </div>
+                                }
+
+                                @if (analysisRequest.Status.ToLower() == "failed")
+                                {
+                                    <div class="d-grid gap-2 mt-3">
+                                        <button class="btn btn-warning" @onclick="ReprocessRequest" disabled="@isReprocessing">
+                                            @if (isReprocessing)
+                                            {
+                                                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            }
+                                            Retry Analysis
+                                        </button>
+                                    </div>
+                                }
+
+                                @if (analysisRequest.ResourceTypes.Any())
+                                {
+                                    <div class="mt-3">
+                                        <h6>Resource Types:</h6>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            @foreach (var resourceType in analysisRequest.ResourceTypes)
+                                            {
+                                                <span class="badge bg-light text-dark">@resourceType.Split('/').LastOrDefault()</span>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        @if (analysisRequest.Status.ToLower() is "pending" or "inprogress")
+                        {
+                            <div class="mt-4">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 45%"></div>
+                                </div>
+                                <p class="text-muted mt-2">
+                                    <i class="bi bi-info-circle"></i>
+                                    Analysis in progress. You will receive an email when it's complete.
+                                    This page will automatically refresh every 30 seconds.
+                                </p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <button class="btn btn-outline-primary" @onclick="GoBackToAnalysis">
+                    <i class="bi bi-arrow-left"></i> Start New Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid RequestId { get; set; }
+
+    private AnalysisRequestResponse? analysisRequest;
+    private Timer? refreshTimer;
+    private bool isReprocessing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAnalysisRequest();
+        StartAutoRefresh();
+    }
+
+    private async Task LoadAnalysisRequest()
+    {
+        analysisRequest = await AnalysisApi.GetAnalysisRequestAsync(RequestId);
+    }
+
+    private async Task RefreshStatus()
+    {
+        await LoadAnalysisRequest();
+        StateHasChanged();
+    }
+
+    private void StartAutoRefresh()
+    {
+        // Auto-refresh every 30 seconds if status is pending or in progress
+        refreshTimer = new Timer(async _ =>
+        {
+            if (analysisRequest?.Status.ToLower() is "pending" or "inprogress")
+            {
+                await InvokeAsync(async () =>
+                {
+                    await LoadAnalysisRequest();
+                    StateHasChanged();
+                });
+            }
+        }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+    }
+
+    private async Task ReprocessRequest()
+    {
+        isReprocessing = true;
+        var success = await AnalysisApi.ReprocessAnalysisRequestAsync(RequestId);
+        
+        if (success)
+        {
+            await LoadAnalysisRequest();
+        }
+        
+        isReprocessing = false;
+        StateHasChanged();
+    }
+
+    private void GoBackToAnalysis()
+    {
+        Navigation.NavigateTo("/analysis");
+    }
+
+    public void Dispose()
+    {
+        refreshTimer?.Dispose();
+    }
+}

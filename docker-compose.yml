@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: AzurePortalAnalyzer.API/Dockerfile
+    ports:
+      - "7001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sql-server;Database=AzurePortalAnalyzer;User Id=sa;Password=YourStrongPassword123!;TrustServerCertificate=true;
+      - ConnectionStrings__AzureBlobStorage=UseDevelopmentStorage=true
+      - ConnectionStrings__AzureCommunicationServices=endpoint=https://your-acs-resource.communication.azure.com/;accesskey=your-access-key
+    depends_on:
+      - sql-server
+      - azurite
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: .
+      dockerfile: AzurePortalAnalyzer.Web/Dockerfile
+    ports:
+      - "7002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ApiSettings__BaseUrl=http://api:80
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrongPassword123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+    networks:
+      - app-network
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    volumes:
+      - azurite-data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  sql-data:
+  azurite-data:
