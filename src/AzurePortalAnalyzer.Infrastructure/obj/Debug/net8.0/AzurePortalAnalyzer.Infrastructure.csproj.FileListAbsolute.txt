@@ -1,0 +1,12 @@
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/bin/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.deps.json
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/bin/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.dll
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/bin/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.pdb
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.AssemblyInfoInputs.cache
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.AssemblyInfo.cs
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.csproj.CoreCompileInputs.cache
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.sourcelink.json
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.dll
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/refint/AzurePortalAnalyzer.Infrastructure.dll
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/AzurePortalAnalyzer.Infrastructure.pdb
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Infrastructure/obj/Debug/net8.0/ref/AzurePortalAnalyzer.Infrastructure.dll

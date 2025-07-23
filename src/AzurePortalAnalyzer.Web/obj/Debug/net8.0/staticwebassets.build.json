@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Sroo7DWrEpSv/LU5aOuiFV+Bnls5Dq/1J69oi5H12Wg=",
+  "Source": "AzurePortalAnalyzer.Web",
+  "BasePath": "_content/AzurePortalAnalyzer.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
