@@ -1,0 +1,6 @@
+@AzurePortalAnalyzer.Api_HostAddress = http://localhost:5233
+
+GET {{AzurePortalAnalyzer.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
