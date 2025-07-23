@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AzurePortalAnalyzer.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9735113d32ec1a69b5a2cd9565c0dc9df0873bb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad8319c81da03009f1f3300b8defcd60c6506447")]
 [assembly: System.Reflection.AssemblyProductAttribute("AzurePortalAnalyzer.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AzurePortalAnalyzer.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
