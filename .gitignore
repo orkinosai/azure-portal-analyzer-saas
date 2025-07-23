@@ -1,0 +1,27 @@
+# Build results
+bin/
+obj/
+
+# NuGet
+packages/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio files
+.vs/
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# Azure Storage Emulator
+UseDevelopmentStorage=true
+
+# Environment variables
+.env

@@ -1,0 +1,335 @@
+@page "/analyses"
+@rendermode InteractiveServer
+@using AzurePortalAnalyzer.Api.Models
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Portal Analyses</PageTitle>
+
+<h1>Portal Analyses</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Your Analyses</h5>
+                <button class="btn btn-primary" @onclick="ShowCreateModal">
+                    <i class="fas fa-plus"></i> New Analysis
+                </button>
+            </div>
+            <div class="card-body">
+                @if (analyses == null)
+                {
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                }
+                else if (!analyses.Any())
+                {
+                    <div class="text-center text-muted">
+                        <p>No analyses found. Create your first analysis to get started.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Components</th>
+                                    <th>Documents</th>
+                                    <th>Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var analysis in analyses)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>@analysis.Name</strong>
+                                        </td>
+                                        <td>@analysis.Description</td>
+                                        <td>
+                                            <span class="badge bg-info">@analysis.Components.Count</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">@analysis.Documents.Count</span>
+                                        </td>
+                                        <td>@analysis.UpdatedAt.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" @onclick="() => ViewAnalysis(analysis.Id)">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-warning" @onclick="() => EditAnalysis(analysis)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-success" @onclick="() => GenerateDocument(analysis.Id)">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger" @onclick="() => DeleteAnalysis(analysis.Id)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div class="modal fade @(showModal ? "show d-block" : "")" tabindex="-1" style="@(showModal ? "background-color: rgba(0,0,0,0.5)" : "")">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@(isEditing ? "Edit Analysis" : "Create New Analysis")</h5>
+                <button type="button" class="btn-close" @onclick="HideModal"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" @bind="editingAnalysis.Name" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="3" @bind="editingAnalysis.Description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Components</label>
+                        <div class="border p-3 rounded">
+                            @for (int i = 0; i < editingAnalysis.Components.Count; i++)
+                            {
+                                var component = editingAnalysis.Components[i];
+                                var index = i;
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control mb-2" placeholder="Component Name" @bind="component.Name" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <select class="form-control mb-2" @bind="component.Type">
+                                                    <option value="">Select Type</option>
+                                                    <option value="Form">Form</option>
+                                                    <option value="Button">Button</option>
+                                                    <option value="Navigation">Navigation</option>
+                                                    <option value="Dashboard">Dashboard</option>
+                                                    <option value="Chart">Chart</option>
+                                                    <option value="Table">Table</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-outline-danger btn-sm" @onclick="() => RemoveComponent(index)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <textarea class="form-control mb-2" placeholder="Description" @bind="component.Description"></textarea>
+                                        <textarea class="form-control" placeholder="Requirements (one per line)" @bind="componentRequirementsText[index]" @onblur="() => UpdateComponentRequirements(index)"></textarea>
+                                    </div>
+                                </div>
+                            }
+                            <button type="button" class="btn btn-outline-primary btn-sm" @onclick="AddComponent">
+                                <i class="fas fa-plus"></i> Add Component
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HideModal">Cancel</button>
+                <button type="button" class="btn btn-primary" @onclick="SaveAnalysis">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<PortalAnalysis>? analyses;
+    private bool showModal = false;
+    private bool isEditing = false;
+    private CreatePortalAnalysisRequest editingAnalysis = new();
+    private Dictionary<int, string> componentRequirementsText = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAnalyses();
+    }
+
+    private async Task LoadAnalyses()
+    {
+        try
+        {
+            // For demo purposes, create sample data
+            analyses = new List<PortalAnalysis>
+            {
+                new PortalAnalysis
+                {
+                    Id = 1,
+                    Name = "E-commerce Portal",
+                    Description = "Main customer-facing e-commerce platform",
+                    UserId = "demo-user",
+                    CreatedAt = DateTime.UtcNow.AddDays(-5),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-1),
+                    Components = new List<PortalComponent>
+                    {
+                        new PortalComponent { Name = "Product Catalog", Type = "Dashboard", Requirements = new List<string> { "Display products", "Search functionality", "Filter options" } },
+                        new PortalComponent { Name = "Shopping Cart", Type = "Form", Requirements = new List<string> { "Add/remove items", "Calculate totals", "Proceed to checkout" } }
+                    },
+                    Documents = new List<RequirementDocument>
+                    {
+                        new RequirementDocument { Title = "Requirements v1.0", Format = "PDF", GeneratedAt = DateTime.UtcNow.AddDays(-1) }
+                    }
+                },
+                new PortalAnalysis
+                {
+                    Id = 2,
+                    Name = "Admin Dashboard",
+                    Description = "Administrative portal for system management",
+                    UserId = "demo-user",
+                    CreatedAt = DateTime.UtcNow.AddDays(-10),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-3),
+                    Components = new List<PortalComponent>
+                    {
+                        new PortalComponent { Name = "User Management", Type = "Table", Requirements = new List<string> { "List users", "Create/edit users", "Assign roles" } },
+                        new PortalComponent { Name = "Analytics", Type = "Chart", Requirements = new List<string> { "Display metrics", "Export data", "Real-time updates" } }
+                    },
+                    Documents = new List<RequirementDocument>()
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error loading analyses: {ex.Message}");
+        }
+    }
+
+    private void ShowCreateModal()
+    {
+        editingAnalysis = new CreatePortalAnalysisRequest();
+        componentRequirementsText.Clear();
+        isEditing = false;
+        showModal = true;
+    }
+
+    private void EditAnalysis(PortalAnalysis analysis)
+    {
+        editingAnalysis = new CreatePortalAnalysisRequest
+        {
+            Name = analysis.Name,
+            Description = analysis.Description,
+            Components = analysis.Components.Select(c => new CreatePortalComponentRequest
+            {
+                Name = c.Name,
+                Type = c.Type,
+                Description = c.Description,
+                Properties = c.Properties,
+                Requirements = c.Requirements
+            }).ToList()
+        };
+        
+        componentRequirementsText.Clear();
+        for (int i = 0; i < editingAnalysis.Components.Count; i++)
+        {
+            componentRequirementsText[i] = string.Join("\n", editingAnalysis.Components[i].Requirements);
+        }
+        
+        isEditing = true;
+        showModal = true;
+    }
+
+    private void HideModal()
+    {
+        showModal = false;
+        isEditing = false;
+        editingAnalysis = new CreatePortalAnalysisRequest();
+        componentRequirementsText.Clear();
+    }
+
+    private void AddComponent()
+    {
+        var newComponent = new CreatePortalComponentRequest();
+        editingAnalysis.Components.Add(newComponent);
+        componentRequirementsText[editingAnalysis.Components.Count - 1] = "";
+    }
+
+    private void RemoveComponent(int index)
+    {
+        editingAnalysis.Components.RemoveAt(index);
+        componentRequirementsText.Remove(index);
+        
+        // Reindex the remaining components
+        var newDict = new Dictionary<int, string>();
+        for (int i = 0; i < editingAnalysis.Components.Count; i++)
+        {
+            if (componentRequirementsText.ContainsKey(i < index ? i : i + 1))
+            {
+                newDict[i] = componentRequirementsText[i < index ? i : i + 1];
+            }
+        }
+        componentRequirementsText = newDict;
+    }
+
+    private void UpdateComponentRequirements(int index)
+    {
+        if (componentRequirementsText.ContainsKey(index) && index < editingAnalysis.Components.Count)
+        {
+            editingAnalysis.Components[index].Requirements = componentRequirementsText[index]
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(r => r.Trim())
+                .Where(r => !string.IsNullOrEmpty(r))
+                .ToList();
+        }
+    }
+
+    private async Task SaveAnalysis()
+    {
+        try
+        {
+            // Update all component requirements
+            for (int i = 0; i < editingAnalysis.Components.Count; i++)
+            {
+                UpdateComponentRequirements(i);
+            }
+
+            await JSRuntime.InvokeVoidAsync("alert", "Analysis saved successfully! (Demo mode - not actually saved)");
+            HideModal();
+            await LoadAnalyses();
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Error saving analysis: {ex.Message}");
+        }
+    }
+
+    private async Task ViewAnalysis(int id)
+    {
+        await JSRuntime.InvokeVoidAsync("alert", $"View analysis {id} (Demo mode)");
+    }
+
+    private async Task GenerateDocument(int id)
+    {
+        await JSRuntime.InvokeVoidAsync("alert", $"Generate document for analysis {id} (Demo mode)");
+    }
+
+    private async Task DeleteAnalysis(int id)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this analysis?");
+        if (confirmed)
+        {
+            await JSRuntime.InvokeVoidAsync("alert", $"Analysis {id} deleted (Demo mode)");
+            await LoadAnalyses();
+        }
+    }
+}
