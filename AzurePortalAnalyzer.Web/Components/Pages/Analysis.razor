@@ -1,0 +1,165 @@
+@page "/analysis"
+@using AzurePortalAnalyzer.Web.Models
+@using AzurePortalAnalyzer.Web.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject AnalysisApiService AnalysisApi
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Azure Portal Analysis</PageTitle>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="bi bi-azure"></i> Azure Portal Analysis Request</h3>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i> @errorMessage
+                        </div>
+                    }
+
+                    @if (successMessage != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            <i class="bi bi-check-circle"></i> @successMessage
+                        </div>
+                    }
+
+                    <EditForm Model="@requestModel" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="alert alert-danger" />
+
+                        <div class="mb-3">
+                            <label for="userEmail" class="form-label">Email Address</label>
+                            <InputText id="userEmail" class="form-control" @bind-Value="requestModel.UserEmail" placeholder="your-email@domain.com" />
+                            <ValidationMessage For="@(() => requestModel.UserEmail)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="subscriptionId" class="form-label">Azure Subscription ID</label>
+                            <InputText id="subscriptionId" class="form-control" @bind-Value="requestModel.SubscriptionId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+                            <ValidationMessage For="@(() => requestModel.SubscriptionId)" />
+                            <div class="form-text">Your Azure subscription ID (GUID format)</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="resourceGroup" class="form-label">Resource Group (Optional)</label>
+                            <InputText id="resourceGroup" class="form-control" @bind-Value="requestModel.ResourceGroup" placeholder="Leave empty to analyze all resource groups" />
+                            <ValidationMessage For="@(() => requestModel.ResourceGroup)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Resource Types to Analyze</label>
+                            <div class="row">
+                                @foreach (var resourceType in availableResourceTypes)
+                                {
+                                    <div class="col-md-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="@resourceType.Key" 
+                                                   checked="@requestModel.ResourceTypes.Contains(resourceType.Key)"
+                                                   @onchange="@((e) => HandleResourceTypeChanged(resourceType.Key, (bool)e.Value!))" />
+                                            <label class="form-check-label" for="@resourceType.Key">
+                                                @resourceType.Value
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="form-text">Select resource types to include in the analysis (leave unchecked to analyze all)</div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg" disabled="@isSubmitting">
+                                @if (isSubmitting)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    <span>Processing...</span>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-play-circle"></i>
+                                    <span>Start Analysis</span>
+                                }
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private AnalysisRequestModel requestModel = new();
+    private bool isSubmitting = false;
+    private string? errorMessage;
+    private string? successMessage;
+
+    private readonly Dictionary<string, string> availableResourceTypes = new()
+    {
+        { "Microsoft.Compute/virtualMachines", "Virtual Machines" },
+        { "Microsoft.Storage/storageAccounts", "Storage Accounts" },
+        { "Microsoft.Web/sites", "App Services" },
+        { "Microsoft.Sql/servers", "SQL Servers" },
+        { "Microsoft.Network/virtualNetworks", "Virtual Networks" },
+        { "Microsoft.KeyVault/vaults", "Key Vaults" },
+        { "Microsoft.Insights/components", "Application Insights" },
+        { "Microsoft.ContainerService/managedClusters", "AKS Clusters" },
+        { "Microsoft.ServiceBus/namespaces", "Service Bus" },
+        { "Microsoft.EventHub/namespaces", "Event Hubs" }
+    };
+
+    private void HandleResourceTypeChanged(string resourceType, bool isChecked)
+    {
+        if (isChecked)
+        {
+            if (!requestModel.ResourceTypes.Contains(resourceType))
+            {
+                requestModel.ResourceTypes.Add(resourceType);
+            }
+        }
+        else
+        {
+            requestModel.ResourceTypes.Remove(resourceType);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        isSubmitting = true;
+        errorMessage = null;
+        successMessage = null;
+
+        try
+        {
+            var response = await AnalysisApi.CreateAnalysisRequestAsync(requestModel);
+            
+            if (response != null)
+            {
+                successMessage = $"Analysis request created successfully! Request ID: {response.Id}";
+                
+                // Redirect to the status page after a short delay
+                await Task.Delay(2000);
+                Navigation.NavigateTo($"/analysis/status/{response.Id}");
+            }
+            else
+            {
+                errorMessage = "Failed to create analysis request. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appNamePrefix": {
+      "value": "azure-portal-analyzer"
+    },
+    "sqlAdministratorLogin": {
+      "value": "azureadmin"
+    },
+    "sqlAdministratorLoginPassword": {
+      "value": "YourStrongPassword123!"
+    },
+    "communicationServiceName": {
+      "value": "azure-portal-analyzer-acs"
+    }
+  }
+}
