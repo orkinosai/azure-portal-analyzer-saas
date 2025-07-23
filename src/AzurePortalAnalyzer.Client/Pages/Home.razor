@@ -1,0 +1,107 @@
+﻿@page "/"
+
+<PageTitle>Azure Portal Analyzer</PageTitle>
+
+<div class="hero-section bg-primary text-white p-5 rounded mb-4">
+    <div class="container">
+        <h1 class="display-4">Azure Portal Analyzer</h1>
+        <p class="lead">Generate comprehensive analysis reports and documentation for your Azure Portal configuration with secure document storage and download capabilities.</p>
+        <a href="/documents" class="btn btn-light btn-lg">Get Started</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-shield-check text-primary"></i>
+                    Secure Document Storage
+                </h5>
+                <p class="card-text">
+                    Documents are securely stored in Azure Blob Storage with time-limited SAS tokens for secure downloads.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-file-pdf text-danger"></i>
+                    Multiple Formats
+                </h5>
+                <p class="card-text">
+                    Generate reports in PDF and Markdown formats using industry-standard libraries like QuestPDF and Markdig.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-person-check text-success"></i>
+                    Authentication & Authorization
+                </h5>
+                <p class="card-text">
+                    Built with ASP.NET Core Identity for secure user authentication and authorization controls.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Features</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <i class="bi bi-check-circle text-success"></i>
+                ASP.NET Core 8 Web API Backend
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-check-circle text-success"></i>
+                Azure Blob Storage Integration
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-check-circle text-success"></i>
+                Expiring SAS Token Security
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-check-circle text-success"></i>
+                Blazor WebAssembly Frontend
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-check-circle text-success"></i>
+                PDF & Markdown Generation
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3>Document Types</h3>
+        <div class="list-group">
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Portal Analysis Report</h6>
+                    <small class="text-muted">PDF</small>
+                </div>
+                <p class="mb-1">Comprehensive analysis of Azure Portal configuration and usage patterns.</p>
+            </div>
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Compliance Report</h6>
+                    <small class="text-muted">PDF/Markdown</small>
+                </div>
+                <p class="mb-1">Detailed compliance assessment and recommendations.</p>
+            </div>
+            <div class="list-group-item">
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Security Audit</h6>
+                    <small class="text-muted">PDF/Markdown</small>
+                </div>
+                <p class="mb-1">Security analysis with findings and remediation steps.</p>
+            </div>
+        </div>
+    </div>
+</div>

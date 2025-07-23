@@ -1,0 +1,12 @@
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/bin/Debug/net8.0/AzurePortalAnalyzer.Core.deps.json
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/bin/Debug/net8.0/AzurePortalAnalyzer.Core.dll
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/bin/Debug/net8.0/AzurePortalAnalyzer.Core.pdb
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.AssemblyInfoInputs.cache
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.AssemblyInfo.cs
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.csproj.CoreCompileInputs.cache
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.sourcelink.json
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.dll
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/refint/AzurePortalAnalyzer.Core.dll
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/AzurePortalAnalyzer.Core.pdb
+/home/runner/work/azure-portal-analyzer-saas/azure-portal-analyzer-saas/src/AzurePortalAnalyzer.Core/obj/Debug/net8.0/ref/AzurePortalAnalyzer.Core.dll
